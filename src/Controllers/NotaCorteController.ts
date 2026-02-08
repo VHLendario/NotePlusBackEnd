@@ -1,43 +1,64 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../database/datasource";
 import { NotasCorte } from "../Entities/NotasCorte";
-import { Like, ILike } from "typeorm";
+import { Like, ILike, Raw } from "typeorm";
 
 export class NotasCorteController {
   async search(req: Request, res: Response) {
+    const { curso, universidade, cidade, ano } = req.query;
+    const filtros: any = {};
+
+    // Só adiciona ao objeto de filtro se existir valor e não for string vazia
+    if (curso && curso !== "") {
+      // Isso remove os acentos tanto do que está no banco quanto do que o usuário digitou
+      filtros.curso = Raw((alias) => `unaccent(${alias}) ILIKE unaccent('%${curso}%')`);
+    }
+
+    if (universidade && universidade !== "") {
+      filtros.sigla_universidade = ILike(`%${universidade}%`);
+    }
+
+    if (cidade && cidade !== "") {
+      filtros.cidade = ILike(`%${cidade}%`);
+    }
+
+    if (ano && ano !== "") {
+      filtros.ano = Number(ano); // Converte "2025" para 2025
+    }
+
+    const repo = AppDataSource.getRepository(NotasCorte);
+    const resultados = await repo.find({
+      where: filtros,
+      order: {
+        nota_corte: "DESC",
+      },
+      take: 100,
+    });
+
+    return res.json(resultados);
+  }
+
+  async suggestions(req: Request, res: Response) {
+    const { curso } = req.query;
+    if (!curso) return res.json([]); // Evita erro se o curso vier vazio
+
+    const repo = AppDataSource.getRepository(NotasCorte);
+
     try {
-      const repo = AppDataSource.getRepository(NotasCorte);
+      const cursos = await repo
+        .createQueryBuilder("nota")
+        .select("DISTINCT(nota.curso)", "curso")
+        .where("unaccent(nota.curso) ILIKE unaccent(:termo)", { termo: `%${curso}%` })
+        .limit(10)
+        .getRawMany();
 
-      // Pegamos os filtros que vêm da URL (ex: /pesquisar?curso=Direito)
-      const { curso, universidade, cidade, ano } = req.query;
-
-      // Montamos o objeto de filtro dinamicamente
-      const filtros: any = {};
-
-      /* http://localhost:3333/pesquisar?curso=CIÊNCIA DA COMPUTAÇÃO */
-      if (universidade) {
-        filtros.sigla_universidade = ILike(`%${universidade}%`);
-      }
-      if (cidade) {
-        filtros.cidade = ILike(`%${cidade}%`);
-      }
-      if (ano) {
-        filtros.ano = Number(ano);
-      }
-
-      // Faz a busca no banco
-      const resultados = await repo.find({
-        where: filtros,
-        order: {
-          nota_corte: "DESC", // Mostra as maiores notas primeiro
-        },
-        take: 100, // Limita a 100 resultados para não travar o front
-      });
-
-      return res.json(resultados);
+      // No getRawMany, o nome da chave costuma vir exatamente como no SELECT
+      const listaNomes = cursos.map(c => c.curso);
+      console.log("Sugestões encontradas:", listaNomes); // Debug no console do terminal
+      return res.json(listaNomes);
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Erro interno no servidor" });
+      console.error("Erro no Banco:", error);
+      return res.status(500).json({ error: "Erro ao buscar sugestões" });
     }
   }
 }
