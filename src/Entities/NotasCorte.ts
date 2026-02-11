@@ -17,6 +17,9 @@ export class NotasCorte {
   @Column({ name: 'SG_IES' })
   sigla_universidade!: string;
 
+  @Column ({name: 'SG_UF_CAMPUS'})
+  uf_campus!: string
+
   @Column({ name: 'NO_CAMPUS' })
   campus!: string;
 
