@@ -5,7 +5,7 @@
     "license": "MIT",
     "description": "",
     "scripts": {
-        "build": "tsc",
+        "build": "npx tsc",
         "start": "node dist/server.js",
         "dev": "ts-node-dev --transpile-only src/server.ts",
         "typeorm": "typeorm-ts-node-commonjs"
