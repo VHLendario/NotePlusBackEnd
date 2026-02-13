@@ -10,7 +10,7 @@ const isProduction = process.env.NODE_ENV === "production";
 // Criamos um objeto base com as configurações comuns
 const dbConfig: any = {
     type: "postgres",
-    synchronize: false, 
+    synchronize: true, 
     logging: !isProduction,
     entities: [NotasCorte, Usuario, UsuarioConfig],
     migrations: [],
