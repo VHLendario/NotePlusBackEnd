@@ -10,5 +10,9 @@ AppDataSource.initialize().then(() => {
     app.use(express.json());
     app.use(routes);
 
-    return app.listen(3333, () => console.log("Servidor rodando na porta 3333 e Banco Conectado!"));
+    const PORT = process.env.PORT || 3333;
+
+    app.listen(Number(PORT), "0.0.0.0", () => {
+        console.log(`Servidor rodando na porta ${PORT} e Banco Conectado!`);
+    });
 }).catch(error => console.log("Erro ao conectar no banco:", error));

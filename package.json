@@ -1,19 +1,21 @@
 {
     "name": "node_crud",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "dist/server.js",
     "license": "MIT",
     "description": "",
     "scripts": {
+        "build": "tsc",
+        "start": "node dist/server.js",
         "dev": "ts-node-dev --transpile-only src/server.ts",
-        "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "typeorm": "typeorm-ts-node-commonjs"
     },
     "keywords": [],
     "author": "",
     "type": "commonjs",
     "dependencies": {
         "cors": "^2.8.6",
+        "dotenv": "^17.3.1",
         "express": "^5.2.1",
         "mssql": "^12.2.0",
         "pg": "^8.18.0",
@@ -23,6 +25,7 @@
     "devDependencies": {
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
+        "@types/node": "^25.2.3",
         "ts-node-dev": "^2.0.0",
         "typescript": "^5.9.3"
     }
