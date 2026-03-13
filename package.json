@@ -5,6 +5,8 @@
     "license": "MIT",
     "description": "",
     "scripts": {
+        "build": "tsc",
+        "start": "node dist/server.js",
         "dev": "ts-node-dev --transpile-only src/server.ts",
         "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
         "test": "echo \"Error: no test specified\" && exit 1"
