@@ -5,7 +5,7 @@ import { Like, ILike, Raw } from "typeorm";
 
 export class NotasCorteController {
   async search(req: Request, res: Response) {
-    const { curso, universidade, cidade, ano, global } = req.query;
+    const { curso, universidade, cidade, ano, global, codigo } = req.query;
     const filtros: any = {};
     const isDetalhes = curso && universidade && global !== 'true';
     const colunasLista: any = {
@@ -28,14 +28,13 @@ export class NotasCorteController {
     let whereClause: any;
 
     // Página de Detalhes
-    // Se tenho curso E universidade E NÃO é a busca global da home
-    if (curso && universidade && global !== 'true') {
+    if (codigo) {
       whereClause = {
         ...filtros,
-        curso: curso,
-        sigla_universidade: universidade
+        codigo_curso: Number(codigo)
       };
     }
+
     // 2. Busca Global (Home)
     else if (global === 'true' && curso) {
       const resultados = await repo

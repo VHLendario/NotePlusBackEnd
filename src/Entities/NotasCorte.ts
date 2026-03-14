@@ -26,6 +26,9 @@ export class NotasCorte {
   @Column({ name: 'NO_MUNICIPIO_CAMPUS' })
   cidade!: string;
 
+  @Column({ name: 'CO_IES_CURSO' })
+  codigo_curso!: number;
+
   @Column({ name: 'NO_CURSO' })
   curso!: string;
 
