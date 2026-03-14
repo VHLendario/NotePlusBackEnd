@@ -41,6 +41,7 @@ export class NotasCorteController {
         .createQueryBuilder("nota")
         .select([
           "nota.curso AS curso",
+          "nota.codigo_curso AS codigo_curso",
           "nota.sigla_universidade AS sigla_universidade",
           "nota.nome_universidade AS nome_universidade",
           "nota.uf_campus AS uf_campus",
@@ -57,6 +58,7 @@ export class NotasCorteController {
           { curso: `%${curso}%` }
         )
         .groupBy("nota.curso")
+        .addGroupBy("nota.codigo_curso")
         .addGroupBy("nota.sigla_universidade")
         .addGroupBy("nota.nome_universidade")
         .addGroupBy("nota.uf_campus")
@@ -75,6 +77,7 @@ export class NotasCorteController {
         .createQueryBuilder("nota")
         .select([
           "nota.curso AS curso",
+          "nota.codigo_curso AS codigo_curso",
           "nota.sigla_universidade AS sigla_universidade",
           "nota.nome_universidade AS nome_universidade",
           "nota.campus AS campus",
@@ -85,6 +88,7 @@ export class NotasCorteController {
           curso: `%${curso}%`
         })
         .groupBy("nota.curso")
+        .addGroupBy("nota.codigo_curso")
         .addGroupBy("nota.sigla_universidade")
         .addGroupBy("nota.nome_universidade")
         .addGroupBy("nota.campus")
@@ -102,6 +106,7 @@ export class NotasCorteController {
         .createQueryBuilder("nota")
         .select([
           "nota.curso AS curso",
+          "nota.codigo_curso AS codigo_curso",
           "nota.sigla_universidade AS sigla_universidade",
           "nota.nome_universidade AS nome_universidade",
           "nota.uf_campus AS uf_campus",
@@ -117,6 +122,7 @@ export class NotasCorteController {
           { universidade: `%${universidade}%` }
         )
         .groupBy("nota.curso")
+        .addGroupBy("nota.codigo_curso")
         .addGroupBy("nota.sigla_universidade")
         .addGroupBy("nota.nome_universidade")
         .addGroupBy("nota.uf_campus")
